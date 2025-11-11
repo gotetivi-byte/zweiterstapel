@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Zweiter Stapel 2.0 - Solidaritas Tanpa Batas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ====================================
+           CSS: STYLING & ANIMASI AWAL
+        ==================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background-color: #f0f2f5;
+            color: #333;
+            /* scroll-behavior: smooth; akan diatasi oleh JS untuk presisi lebih baik */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: #fff;
+            padding: 150px 0;
+            text-align: center;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+        }
+
+        .hero-content {
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero-section h1 {
+            font-size: 4.5em;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-section h2.slogan-title {
+            font-size: 1.8em;
+            font-style: italic;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ffc107;
+            color: #333;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background: #e0a800;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- NAVIGASI (Dibuat Fixed & Transparan Awalnya) --- */
+        .main-nav {
+            background: transparent; /* Awalnya transparan */
+            padding: 15px 0;
+            position: fixed; /* Ubah ke fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background 0.4s, box-shadow 0.4s;
+        }
+
+        .main-nav.scrolled { /* Class yang ditambahkan JS saat scroll */
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-nav ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .main-nav ul li {
+            display: inline-block;
+            padding: 0 25px;
+        }
+
+        .main-nav ul li a {
+            color: #fff; /* Warna default putih agar kontras di atas hero */
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .main-nav.scrolled ul li a {
+            color: #007bff; /* Warna biru saat di-scroll */
+        }
+
+        .main-nav ul li a:hover {
+            color: #ffc107;
+            transform: translateY(-2px);
+        }
+        
+        /* --- SECTION UMUM --- */
+        .section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #ffc107;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- ELEMEN YANG DIANIMASIKAN (JS) --- */
+        .info-card, .photo-item, .contact-card {
+            opacity: 0; /* Mulai dengan tidak terlihat */
+            transition: transform 0.8s ease, opacity 0.8s ease;
+        }
+
+        /* Efek khusus untuk info-card */
+        .info-card {
+            transform: translateY(50px);
+        }
+
+        /* Efek khusus untuk photo-item */
+        .photo-item {
+            transform: scale(0.9);
+        }
+        
+        /* Efek khusus untuk contact-card */
+        .contact-card:nth-child(1) { transform: translateX(-50px); }
+        .contact-card:nth-child(2) { transform: translateY(50px); }
+        .contact-card:nth-child(3) { transform: translateX(50px); }
+
+
+        .info-card.visible, .photo-item.visible, .contact-card.visible {
+            opacity: 1; /* Tampilkan saat class 'visible' ditambahkan JS */
+            transform: translate(0, 0) scale(1);
+        }
+
+        /* --- SISA STYLING --- */
+        .sejarah-section {
+            background-color: #fff;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            min-width: 280px;
+            text-align: left;
+            border-top: 5px solid #007bff;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .galeri-section {
+            background-color: #e9ecef;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-item {
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease-in-out, filter 0.5s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.8);
+        }
+
+        .contact-section {
+            background: linear-gradient(90deg, #343a40 0%, #495057 100%);
+            color: #fff;
+        }
+
+        .contact-section .section-title {
+            color: #ffc107;
+        }
+
+        .contact-links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-card { /* Class gabungan untuk admin-card & instagram-card */
+            background: #333;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: background 0.3s;
+        }
+
+        .contact-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        .action-btn {
+            display: block;
+            padding: 12px;
+            margin-top: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .wa-btn {
+            background: #25d366;
+            color: #fff;
+        }
+
+        .wa-btn:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+        }
+
+        .ig-btn {
+            background: #c13584;
+            color: #fff;
+        }
+
+        .ig-btn:hover {
+            background: #833ab4;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #212529;
+            color: #adb5bd;
+            text-align: center;
+            padding: 25px 0;
+            font-size: 0.9em;
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 992px) {
+            .info-card {
+                width: 45%;
+            }
+            .hero-section h1 {
+                font-size: 3.5em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+            .info-card {
+                width: 90%;
+                margin-bottom: 20px;
+            }
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .main-nav ul li {
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <p class="pre-title">Angkatan Ke-2 dari Yayasan Al-Misykah Tahfidz Qur'an</p>
+            <h1>Zweiter Stapel</h1>
+            <h2 class="slogan-title">"Solidaritas Tanpa Batas"</h2>
+            <a href="#galeri" class="cta-button" id="cta-galeri">Lihat Kenangan Kami <i class="fas fa-arrow-down"></i></a>
+        </div>
+    </section>
+
+    <nav class="main-nav" id="main-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#hero"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#sejarah"><i class="fas fa-book-open"></i> Sejarah</a></li>
+                <li><a href="#galeri"><i class="fas fa-images"></i> Galeri Keren</a></li>
+                <li><a href="#kontak"><i class="fas fa-headset"></i> Kontak Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="sejarah" class="section sejarah-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Mengenal Zweiter Stapel</h2>
+                <div class="card-container">
+                    <div class="info-card">
+                        <h3>Yayasan Kami</h3>
+                        <p>Kami adalah angkatan lulusan dari **Yayasan Al-Misykah Tahfidz Qur'an**. Sebuah yayasan yang berpegang teguh pada nilai-nilai agama dan pendidikan terbaik.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Angkatan Ke-2</h3>
+                        <p>Zweiter Stapel, yang berarti "Tumpukan Kedua," mencerminkan pondasi kuat yang kami bangun sebagai angkatan penerus.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Filosofi Slogan</h3>
+                        <p>Slogan **"Solidaritas Tanpa Batas"** bukan hanya kata-kata, melainkan janji untuk selalu mendukung dan menjaga persaudaraan, tanpa melihat jarak dan waktu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="galeri" class="section galeri-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-camera-retro"></i> Momen Abadi Kami</h2>
+                <div class="gallery-grid">
+                    <div class="photo-item"><img src="2.jpg" alt="Momen Kelas"></div>
+                    <div class="photo-item"><img src="3.png" alt="Acara Sekolah"></div>
+                    <div class="photo-item"><img src="4.jpg" alt="Wisuda"></div>
+                    <div class="photo-item"><img src="5.jpg" alt="Rihlah"></div>
+                    <div class="photo-item"><img src="6.jpg" alt="Makan Bersama"></div>
+                    <div class="photo-item"><img src="7.jpg" alt="Kegiatan Santri"></div>
+                    </div>
+            </div>
+        </section>
+
+        <section id="kontak" class="section contact-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-link"></i> Hubungi Kami</h2>
+                <div class="contact-links-grid">
+                    
+                    <div class="contact-card">
+                        <i class="fab fa-whatsapp contact-icon"></i>
+                        <h3>Admin 1</h3>
+                        <p>+62 853-5379-2960</p>
+                        <a href="https://wa.me/6285353792960" target="_blank" class="action-btn wa-btn">
+                            <i class="fab fa-whatsapp"></i> Chat Sekarang
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fab fa-whatsapp contact-icon"></i>
+                        <h3>Admin 2</h3>
+                        <p>+62 853-5379-5633</p>
+                        <a href="https://wa.me/6285353795633" target="_blank" class="action-btn wa-btn">
+                            <i class="fab fa-whatsapp"></i> Chat Sekarang
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="fab fa-instagram contact-icon"></i>
+                        <h3>Instagram Resmi</h3>
+                        <p>Lihat aktivitas kami!</p>
+                        <a href="https://www.instagram.com/zweiterstapel" target="_blank" class="action-btn ig-btn">
+                            <i class="fab fa-instagram"></i> Follow @zweiterstapel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Zweiter Stapel &copy; 2025 | Yayasan Al-Misykah Tahfidz Qur'an.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('main-nav');
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            
+            // --- 1. Navigasi Sticky dan Ganti Warna ---
+            function toggleStickyNav() {
+                // Tambahkan class 'scrolled' saat digulir lebih dari 100px
+                if (window.scrollY > 100) {
+                    mainNav.classList.add('scrolled');
+                } else {
+                    mainNav.classList.remove('scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', toggleStickyNav);
+            toggleStickyNav(); // Jalankan saat load
+
+            // --- 2. Smooth Scroll JS (Mengatasi Navigasi Fixed) ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const offset = mainNav.offsetHeight; // Ambil tinggi nav
+                        window.scrollTo({
+                            top: targetElement.offsetTop - offset + 1, // Scroll ke posisi target dikurangi tinggi nav
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // --- 3. Animasi On-Scroll (Intersection Observer) ---
+            const animateElements = document.querySelectorAll('.info-card, .photo-item, .contact-card');
+            
+            // Buat Observer
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Tambahkan class 'visible' saat elemen masuk viewport
+                        entry.target.classList.add('visible');
+                        // Hentikan pengamatan setelah teranimasi
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                root: null, // Mengamati di dalam viewport
+                rootMargin: '0px',
+                threshold: 0.2 // Trigger saat 20% elemen terlihat
+            });
+
+            // Amati setiap elemen
+            animateElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // --- 4. Event Listener Tombol CTA (Contoh Interaksi Tambahan) ---
+            const ctaButton = document.getElementById('cta-galeri');
+
+            if (ctaButton) {
+                ctaButton.addEventListener('click', function() {
+                    // Tindakan tambahan saat tombol CTA di Hero diklik
+                    console.log("Tombol 'Lihat Kenangan Kami' diklik.");
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
